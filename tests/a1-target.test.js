@@ -16,7 +16,9 @@ function loadScripts(dir, files) {
 
 const LIBS = ['constants.js', 'color-utils.js', 'filament-profiles.js', 'template-settings.js', 'converter.js'];
 const current = loadScripts('extension/src/lib', [...LIBS, 'targets/a1-profiles.js', 'targets.js']).C3MF;
-const original = loadScripts('original/v1.1.5/src/lib', LIBS);
+// Unmodified upstream copy, kept locally only (not in the repository).
+const ORIGINAL_DIR = path.join(ROOT, 'original/v1.1.5/src/lib');
+const original = fs.existsSync(ORIGINAL_DIR) ? loadScripts('original/v1.1.5/src/lib', LIBS) : null;
 const A1 = current.TARGETS.a1;
 
 const build = (slots, opts = {}) => JSON.parse(A1.buildProjectSettings(slots, !!opts.hasSupport, opts));
@@ -71,7 +73,7 @@ test('supports are enabled only when the source file uses them', () => {
   assert.notStrictEqual(build(slots).enable_support, '1');
 });
 
-test('U1 project settings are identical to v1.1.5', () => {
+test('U1 project settings are identical to v1.1.5', { skip: !original && 'original/ not present' }, () => {
   const slots = [{ color: '#FF0000', type: 'PLA' }, { color: '#00FF00', type: 'PETG-HF' }];
   for (const hasSupport of [false, true]) {
     // buildProjectSettings is a script-level function in v1.1.5, so evaluate it inside that context
