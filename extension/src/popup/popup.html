@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor 3MF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <div class="header">
+        <div class="header-brand">
+            <span class="brand-source">Cualquier 3MF</span>
+            <span class="divider"></span>
+            <span id="brand-target" class="brand-target">Snapmaker U1</span>
+        </div>
+        <h1>Conversor <span class="accent">3MF</span></h1>
+        <div class="target-switch" role="radiogroup" aria-label="Impresora de destino">
+            <button type="button" class="target-option" role="radio" data-target="u1">Snapmaker U1</button>
+            <button type="button" class="target-option" role="radio" data-target="a1">Bambu A1</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <!-- Drop zone for manual file selection -->
+        <div id="drop-zone-state" class="card-body hidden">
+            <label for="file-upload" id="drop-zone" class="drop-zone">
+                <div class="drop-zone-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                <p class="drop-zone-label"><strong>Suelta archivos .3mf</strong> o haz clic para buscarlos</p>
+                <p class="drop-zone-hint">Solo .3mf &middot; los archivos con filamentos idénticos se convierten juntos</p>
+                <input id="file-upload" type="file" class="hidden" accept=".3mf" multiple />
+            </label>
+        </div>
+
+        <!-- Loading state -->
+        <div id="loading-state" class="card-body loading-state hidden">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            <span id="loading-text">Analizando archivo...</span>
+        </div>
+
+        <!-- Error state -->
+        <div id="error-state" class="card-body hidden">
+            <div class="error-banner visible">
+                <i class="fa-solid fa-circle-exclamation" style="flex-shrink:0"></i>
+                <span id="error-message" style="flex:1"></span>
+            </div>
+            <div class="actions-bar" style="border-top:none;padding-top:0">
+                <button id="btn-close-error" class="btn-new">
+                    <i class="fa-solid fa-xmark" style="font-size:0.9rem"></i> Cerrar
+                </button>
+            </div>
+        </div>
+
+        <!-- Batch summary state -->
+        <div id="batch-done-state" class="card-body hidden">
+            <div class="already-u1-banner">
+                <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                <div>
+                    <strong id="batch-done-title"></strong>
+                    <ul id="batch-done-list" class="batch-file-list"></ul>
+                </div>
+            </div>
+            <div class="actions-bar" style="border-top:none;padding-top:0.5rem">
+                <button id="btn-close-batch" class="btn-new">
+                    <i class="fa-solid fa-xmark" style="font-size:0.9rem" aria-hidden="true"></i> Cerrar
+                </button>
+            </div>
+        </div>
+
+        <!-- Mapping UI -->
+        <div id="mapping-ui" class="hidden">
+            <!-- Batch group info (multi-file mode only) -->
+            <div id="batch-banner" class="batch-banner hidden">
+                <strong id="batch-banner-title"></strong>
+                <ul id="batch-banner-files" class="batch-file-list"></ul>
+            </div>
+
+            <!-- Inline error for conversion failures -->
+            <div id="convert-error" class="error-banner" aria-live="assertive" aria-atomic="true" style="margin:0.75rem 1.75rem">
+                <i class="fa-solid fa-circle-exclamation" style="flex-shrink:0" aria-hidden="true"></i>
+                <span id="convert-error-msg" style="flex:1"></span>
+                <button id="convert-error-dismiss" aria-label="Descartar error" style="background:none;border:none;color:var(--red);cursor:pointer;padding:2px;margin-left:auto;opacity:0.6">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <!-- Output: Printer Slots -->
+            <!-- Print profile (targets with print presets only) -->
+            <div id="print-profile-row" class="hidden">
+                <div class="section-label"><i class="fa-solid fa-sliders"></i> Perfil de impresión</div>
+                <div class="print-profile-wrap">
+                    <select id="print-profile" class="type-select print-profile-select" aria-label="Perfil de impresión"></select>
+                </div>
+            </div>
+
+            <div class="section-label"><i class="fa-solid fa-print"></i> <span id="slots-label">Slots de la U1</span></div>
+            <div id="slots-strip" class="slots-strip"></div>
+
+            <hr class="section-divider">
+
+            <!-- Input: File Colors -->
+            <div class="section-label"><i class="fa-solid fa-palette"></i> Colores del archivo <span id="route-hint" style="font-weight:400;letter-spacing:0.04em;margin-left:4px"></span></div>
+            <div id="input-list" class="input-list"></div>
+
+            <div class="actions-bar">
+                <button id="btn-convert" class="btn-convert">
+                    <i id="convert-icon" class="fa-solid fa-bolt"></i>
+                    <span id="convert-label">Convertir y descargar</span>
+                </button>
+                <button id="btn-original" class="btn-new">
+                    <i class="fa-solid fa-download" style="font-size:0.9rem"></i> Original
+                </button>
+                <button id="btn-cancel" class="btn-new">
+                    <i class="fa-solid fa-xmark" style="font-size:0.9rem"></i> <span id="cancel-label">Cancelar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="https://buymeacoffee.com/ericreid" target="_blank" rel="noopener noreferrer">
+            <i class="fa-solid fa-mug-hot" aria-hidden="true"></i> Invítame un café
+        </a>
+    </div>
+</div>
+
+<!-- Load libs (popup has full DOM access for DOMParser/XMLSerializer) -->
+<script src="../../vendor/jszip.min.js"></script>
+<script src="../lib/constants.js"></script>
+<script src="../lib/color-utils.js"></script>
+<script src="../lib/filament-profiles.js"></script>
+<script src="../lib/template-settings.js"></script>
+<script src="../lib/analyzer.js"></script>
+<script src="../lib/converter.js"></script>
+<script src="../lib/batch.js"></script>
+<script src="../lib/filename.js"></script>
+<script src="../lib/targets/a1-profiles.js"></script>
+<script src="../lib/targets.js"></script>
+<script src="../lib/file-store.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

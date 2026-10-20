@@ -1,0 +1,54 @@
+{
+  "action": {
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png"
+    },
+    "default_title": "Conversor 3MF"
+  },
+  "background": {
+    "service_worker": "src/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "src/content-script.js"
+      ],
+      "matches": [
+        "https://makerworld.com/*",
+        "https://*.makerworld.com/*",
+        "https://www.printables.com/*",
+        "https://www.thingiverse.com/*"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "description": "Convierte archivos .3mf al formato de Snapmaker U1 o Bambu Lab A1. Compatible con Bambu Lab, PrusaSlicer y 3MF estándar.",
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "manifest_version": 3,
+  "name": "Conversor 3MF a Snapmaker U1 y Bambu A1",
+  "options_page": "src/options/options.html",
+  "permissions": [
+    "downloads",
+    "storage"
+  ],
+  "version": "1.2.0",
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "vendor/*"
+      ]
+    }
+  ]
+}

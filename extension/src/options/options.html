@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor 3MF - Configuración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+
+<div class="options-shell">
+    <h1>Configuración del conversor 3MF</h1>
+
+    <div class="option-group">
+        <label class="option-label" for="interception-mode">Modo de captura</label>
+        <select id="interception-mode" class="option-select">
+            <option value="auto">Automático (intercepta el clic y, si falla, procesa la descarga)</option>
+            <option value="click">Interceptar clic (modo A)</option>
+            <option value="download">Procesar descargas (modo B)</option>
+        </select>
+        <p class="option-desc">Cómo la extensión captura las descargas .3mf.</p>
+    </div>
+
+    <div class="option-group">
+        <label class="option-label" for="default-type">Tipo de filamento por defecto</label>
+        <select id="default-type" class="option-select">
+            <option value="PLA">PLA</option>
+            <option value="PETG-HF">PETG-HF</option>
+            <option value="ABS">ABS</option>
+            <option value="TPU">TPU</option>
+        </select>
+        <p class="option-desc">Tipo de filamento para los slots nuevos.</p>
+    </div>
+
+    <div class="option-group">
+        <label class="option-check">
+            <input type="checkbox" id="auto-convert">
+            <span>Convertir automáticamente archivos de un solo color</span>
+        </label>
+        <p class="option-desc">Omite la pantalla de asignación cuando el archivo tiene un solo color.</p>
+    </div>
+
+    <div id="status" class="status"></div>
+</div>
+
+<script src="options.js"></script>
+</body>
+</html>
