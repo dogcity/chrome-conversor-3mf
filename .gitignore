@@ -4,3 +4,8 @@ node_modules/
 # Local only: unmodified upstream copy and internal task notes
 original/
 odd/
+
+# Local tooling configuration
+.atl/
+.claude/
+.mcp.json
