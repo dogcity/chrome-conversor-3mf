@@ -3,7 +3,7 @@ const assert = require('node:assert');
 
 globalThis.self = globalThis;
 require('../extension/src/lib/batch.js');
-const { filamentSignature, groupBySignature } = self.MWU1;
+const { filamentSignature, groupBySignature } = self.C3MF;
 
 const RED_PLA = { id: '1', color: '#FF0000', type: 'PLA' };
 const BLUE_PLA = { id: '2', color: '#0000FF', type: 'PLA' };

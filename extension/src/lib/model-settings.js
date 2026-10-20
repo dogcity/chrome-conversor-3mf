@@ -1,11 +1,11 @@
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
 /**
  * Model parameters carried over from the source project to the target printer.
  * Bambu Studio, OrcaSlicer and Snapmaker Orca share these key names. Speeds,
  * accelerations, temperatures and G-code are never copied: they belong to the printer.
  */
-self.MWU1.MODEL_SETTING_KEYS = [
+self.C3MF.MODEL_SETTING_KEYS = [
   'layer_height',
   'wall_loops',
   'top_shell_layers',
@@ -29,12 +29,12 @@ const ALWAYS_COPIED = new Set(['layer_height']);
  * target profile keeps its own values for everything else.
  * @returns {Object<string, string>}
  */
-self.MWU1.extractModelSettings = function(cfg) {
+self.C3MF.extractModelSettings = function(cfg) {
   const settings = {};
   if (!cfg || typeof cfg !== 'object') return settings;
   const diff = Array.isArray(cfg.different_settings_to_system) ? cfg.different_settings_to_system[0] : '';
   const changed = new Set(typeof diff === 'string' ? diff.split(';') : []);
-  for (const key of self.MWU1.MODEL_SETTING_KEYS) {
+  for (const key of self.C3MF.MODEL_SETTING_KEYS) {
     if (typeof cfg[key] !== 'string') continue;
     if (changed.has(key) || ALWAYS_COPIED.has(key)) settings[key] = cfg[key];
   }
@@ -42,11 +42,11 @@ self.MWU1.extractModelSettings = function(cfg) {
 };
 
 /** Read the model parameters from a source .3mf (empty for non-Bambu/Orca files). */
-self.MWU1.readModelSettings = async function(zip) {
+self.C3MF.readModelSettings = async function(zip) {
   const file = zip.file('Metadata/project_settings.config');
   if (!file) return {};
   try {
-    return self.MWU1.extractModelSettings(JSON.parse(await file.async('string')));
+    return self.C3MF.extractModelSettings(JSON.parse(await file.async('string')));
   } catch {
     return {};
   }
@@ -56,7 +56,7 @@ self.MWU1.readModelSettings = async function(zip) {
  * Apply model parameters over a built project_settings.config JSON string and
  * mark them as changed in the print diff. Returns the input unchanged when empty.
  */
-self.MWU1.applyModelSettings = function(json, settings) {
+self.C3MF.applyModelSettings = function(json, settings) {
   const keys = Object.keys(settings || {});
   if (keys.length === 0) return json;
   const cfg = JSON.parse(json);

@@ -1,7 +1,7 @@
 // Auto-generated from filament_types.3mf — do not edit
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
-self.MWU1.FILAMENT_PROFILES = [
+self.C3MF.FILAMENT_PROFILES = [
   {
     "type": "PLA",
     "settings_id": "Snapmaker PLA SnapSpeed @U1"

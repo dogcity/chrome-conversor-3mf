@@ -4,11 +4,11 @@
  * Runs in a popup window with full DOM access (DOMParser, XMLSerializer, URL.createObjectURL).
  */
 
-const PHYSICAL_SLOTS = self.MWU1.PHYSICAL_SLOTS;
+const PHYSICAL_SLOTS = self.C3MF.PHYSICAL_SLOTS;
 let outputSlots = [];
 let slotMapping = {};
 let inputFilaments = [];
-let currentTarget = self.MWU1.TARGETS.u1;
+let currentTarget = self.C3MF.TARGETS.u1;
 
 // Parsed state for conversion
 let parsedZip = null;
@@ -78,7 +78,7 @@ async function resolveUniqueFilename(desired) {
   } catch {
     // downloads API unavailable — rely on names used in this window
   }
-  const name = self.MWU1.uniqueFilename(desired, taken);
+  const name = self.C3MF.uniqueFilename(desired, taken);
   usedDownloadNames.add(name);
   return name;
 }
@@ -141,7 +141,7 @@ async function downloadBlob(blob, filename) {
   // Don't clear the store here: clearFile() wipes the whole store, so clearing on
   // load would race a near-simultaneous second download and erase its file before
   // its window loads. Stale files are instead dropped on manual open and onStartup.
-  const fileData = await self.MWU1.loadFile();
+  const fileData = await self.C3MF.loadFile();
   if (fileData) {
     await processArrayBuffer(fileData.arrayBuffer, fileData.metadata?.originalName || 'model');
   } else {
@@ -163,7 +163,7 @@ async function loadTarget() {
   } catch {
     // storage unavailable — keep the default
   }
-  applyTarget(self.MWU1.TARGETS[id] || self.MWU1.TARGETS.u1);
+  applyTarget(self.C3MF.TARGETS[id] || self.C3MF.TARGETS.u1);
 }
 
 /** Update every target-dependent label and control. */
@@ -189,7 +189,7 @@ function applyTarget(target) {
 
 document.querySelectorAll('.target-option').forEach(btn => {
   btn.addEventListener('click', () => {
-    const target = self.MWU1.TARGETS[btn.dataset.target];
+    const target = self.C3MF.TARGETS[btn.dataset.target];
     if (!target || target === currentTarget || btnConvert.disabled && !document.getElementById('mapping-ui').classList.contains('hidden')) return;
     applyTarget(target);
     try { chrome.storage.local.set({ target: target.id }); } catch {}
@@ -213,7 +213,7 @@ async function processArrayBuffer(arrayBuffer, name) {
 
     originalName = name || 'model';
 
-    const analysis = await self.MWU1.analyze(arrayBuffer);
+    const analysis = await self.C3MF.analyze(arrayBuffer);
     parsedZip = analysis.zip;
     hasSupport = analysis.hasSupport;
 
@@ -318,7 +318,7 @@ async function startBatch(files) {
       continue;
     }
     try {
-      const analysis = await self.MWU1.analyze(await file.arrayBuffer());
+      const analysis = await self.C3MF.analyze(await file.arrayBuffer());
       if (analysis.filaments.length === 0) throw new Error('No se encontraron filamentos en este archivo');
       items.push({ name, analysis });
     } catch (err) {
@@ -326,7 +326,7 @@ async function startBatch(files) {
     }
   }
 
-  batchGroups = self.MWU1.groupBySignature(items);
+  batchGroups = self.C3MF.groupBySignature(items);
   batchIndex = -1;
   document.getElementById('cancel-label').textContent = 'Saltar';
   showNextBatchGroup();
@@ -354,7 +354,7 @@ async function convertBatchGroup(filteredSlots, filteredMapping) {
     const item = items[i];
     convertLabel.textContent = `Convirtiendo ${i + 1}/${items.length}…`;
     try {
-      const blob = await self.MWU1.convert({
+      const blob = await self.C3MF.convert({
         zip: item.analysis.zip,
         outputSlots: filteredSlots,
         mapping: filteredMapping,
@@ -872,7 +872,7 @@ btnConvert.addEventListener('click', async () => {
     return;
   }
   try {
-    const blob = await self.MWU1.convert({
+    const blob = await self.C3MF.convert({
       zip: parsedZip,
       outputSlots: filteredSlots,
       mapping: filteredMapping,

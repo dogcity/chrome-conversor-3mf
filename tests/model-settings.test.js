@@ -16,7 +16,7 @@ function loadScripts(dir, files) {
 const M = loadScripts('extension/src/lib', [
   'constants.js', 'color-utils.js', 'filament-profiles.js', 'template-settings.js', 'converter.js',
   'targets/a1-profiles.js', 'targets.js', 'model-settings.js',
-]).MWU1;
+]).C3MF;
 const plain = v => JSON.parse(JSON.stringify(v));
 
 // Shape of an Orca/Snapmaker U1 project: the print diff lists what the author changed.

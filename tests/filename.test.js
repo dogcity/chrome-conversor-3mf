@@ -3,7 +3,7 @@ const assert = require('node:assert');
 
 globalThis.self = globalThis;
 require('../extension/src/lib/filename.js');
-const { uniqueFilename } = self.MWU1;
+const { uniqueFilename } = self.C3MF;
 
 test('keeps the name when it is not taken', () => {
   assert.strictEqual(uniqueFilename('model-A1.3mf', new Set()), 'model-A1.3mf');

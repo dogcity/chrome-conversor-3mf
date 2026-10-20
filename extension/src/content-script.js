@@ -12,8 +12,8 @@ const DOWNLOAD_SELECTORS = [
 function attachInterceptors() {
   for (const selector of DOWNLOAD_SELECTORS) {
     document.querySelectorAll(selector).forEach(el => {
-      if (el.dataset.mwu1Hooked) return;
-      el.dataset.mwu1Hooked = 'true';
+      if (el.dataset.c3mfHooked) return;
+      el.dataset.c3mfHooked = 'true';
       el.addEventListener('click', handleDownloadClick, true); // capture phase
     });
   }

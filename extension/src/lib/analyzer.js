@@ -1,4 +1,4 @@
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
 /**
  * Analyze a .3mf file to extract filament info and support status.
@@ -11,7 +11,7 @@ self.MWU1 = self.MWU1 || {};
  * @param {ArrayBuffer} arrayBuffer - Raw .3mf file bytes
  * @returns {Promise<{filaments: Array<{id: string, color: string, type: string}>, hasSupport: boolean, zip: JSZip}>}
  */
-self.MWU1.analyze = async function(arrayBuffer) {
+self.C3MF.analyze = async function(arrayBuffer) {
   const MAX_ENTRIES = 2000;
   // High zip-bomb backstop only — far above any legitimate detailed model (those are
   // well under 1 GB uncompressed). Read from the zip's central directory, so it costs
@@ -26,7 +26,7 @@ self.MWU1.analyze = async function(arrayBuffer) {
   const totalUncompressed = entries.reduce((s, f) => s + (f._data?.uncompressedSize ?? 0), 0);
   if (totalUncompressed > MAX_UNCOMPRESSED) throw new Error('El tamaño descomprimido del ZIP supera el límite de seguridad');
 
-  const normalizeColor = self.MWU1.normalizeColor;
+  const normalizeColor = self.C3MF.normalizeColor;
   let filaments = [];
   let hasSupport = false;
 

@@ -3,9 +3,9 @@
  * service worker and popup without base64 encoding or IPC size limits.
  * Survives service worker termination.
  */
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
-const DB_NAME = 'mwu1';
+const DB_NAME = 'conversor3mf';
 const STORE_NAME = 'files';
 const DB_VERSION = 1;
 
@@ -30,7 +30,7 @@ function idbGet(store, key) {
 }
 
 /** Store pending file data (ArrayBuffer + metadata). */
-self.MWU1.storeFile = async function(arrayBuffer, metadata) {
+self.C3MF.storeFile = async function(arrayBuffer, metadata) {
   const db = await openDB();
   const tx = db.transaction(STORE_NAME, 'readwrite');
   const store = tx.objectStore(STORE_NAME);
@@ -43,7 +43,7 @@ self.MWU1.storeFile = async function(arrayBuffer, metadata) {
 };
 
 /** Load pending file data. Returns { arrayBuffer, metadata } or null. */
-self.MWU1.loadFile = async function() {
+self.C3MF.loadFile = async function() {
   const db = await openDB();
   const tx = db.transaction(STORE_NAME, 'readonly');
   const store = tx.objectStore(STORE_NAME);
@@ -56,7 +56,7 @@ self.MWU1.loadFile = async function() {
 };
 
 /** Clear pending file data. */
-self.MWU1.clearFile = async function() {
+self.C3MF.clearFile = async function() {
   const db = await openDB();
   const tx = db.transaction(STORE_NAME, 'readwrite');
   tx.objectStore(STORE_NAME).clear();

@@ -8,7 +8,7 @@ const ROOT = path.join(__dirname, '..');
 const ctx = vm.createContext({ TextDecoder, TextEncoder });
 ctx.self = ctx;
 vm.runInContext(fs.readFileSync(path.join(ROOT, 'extension/src/lib/centering.js'), 'utf8'), ctx);
-const M = ctx.MWU1;
+const M = ctx.C3MF;
 
 const A1_BED = ['0x0', '256x0', '256x256', '0x256'];
 const U1_BED = ['0.5x1', '270.5x1', '270.5x271', '0.5x271'];

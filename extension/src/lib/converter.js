@@ -1,4 +1,4 @@
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
 /** Serialize XML doc, ensuring exactly one XML declaration. */
 function serializeXML(doc) {
@@ -19,8 +19,8 @@ function serializeXML(doc) {
  * @param {boolean} params.hasSupport - Whether the original file uses supports
  * @returns {Promise<Blob>} The converted .3mf file
  */
-self.MWU1.convert = async function({ zip, outputSlots, mapping, hasSupport, target, printProfile }) {
-  target = target || self.MWU1.TARGETS.u1;
+self.C3MF.convert = async function({ zip, outputSlots, mapping, hasSupport, target, printProfile }) {
+  target = target || self.C3MF.TARGETS.u1;
 
   // Build id_mapping: input filament ID → new 1-based ID string
   const idMapping = {};
@@ -33,9 +33,9 @@ self.MWU1.convert = async function({ zip, outputSlots, mapping, hasSupport, targ
     modifySliceInfo(zip, outputSlots, mapping, target),
     modifyModelSettings(zip, idMapping),
   ]);
-  const newProjectSettings = self.MWU1.applyModelSettings(
+  const newProjectSettings = self.C3MF.applyModelSettings(
     target.buildProjectSettings(outputSlots, hasSupport, { printProfile }),
-    await self.MWU1.readModelSettings(zip),
+    await self.C3MF.readModelSettings(zip),
   );
 
   // Build output ZIP — copy entries in parallel, substitute modified files
@@ -59,8 +59,8 @@ self.MWU1.convert = async function({ zip, outputSlots, mapping, hasSupport, targ
     } else {
       let bytes = await file.async('uint8array');
       if (path === '3D/3dmodel.model') {
-        bytes = await self.MWU1.centerOnBed(zip, bytes, JSON.parse(newProjectSettings).printable_area);
-        if (target.application) bytes = self.MWU1.setApplicationMetadata(bytes, target.application);
+        bytes = await self.C3MF.centerOnBed(zip, bytes, JSON.parse(newProjectSettings).printable_area);
+        if (target.application) bytes = self.C3MF.setApplicationMetadata(bytes, target.application);
       }
       output.file(path, bytes);
     }
@@ -75,7 +75,7 @@ self.MWU1.convert = async function({ zip, outputSlots, mapping, hasSupport, targ
  * unless the model declares a Bambu Studio application. Works on raw bytes and only
  * scans the header, so multi-hundred-MB geometry is never decoded into a string.
  */
-self.MWU1.setApplicationMetadata = function(bytes, application) {
+self.C3MF.setApplicationMetadata = function(bytes, application) {
   const HEADER_BYTES = 65536;
   // latin1 maps one byte to one char, so string indices are byte offsets (tags are ASCII)
   const header = new TextDecoder('latin1').decode(bytes.subarray(0, HEADER_BYTES));
@@ -107,7 +107,7 @@ self.MWU1.setApplicationMetadata = function(bytes, application) {
  * Port of app.py:284-337.
  */
 async function modifySliceInfo(zip, outputSlots, mapping, target) {
-  const { DUMMY_SLOT_COLOR: DUMMY_COLOR, DUMMY_SLOT_TYPE: DUMMY_TYPE } = self.MWU1;
+  const { DUMMY_SLOT_COLOR: DUMMY_COLOR, DUMMY_SLOT_TYPE: DUMMY_TYPE } = self.C3MF;
   const MIN_FILAMENTS = target.minFilaments;
   const sliceFile = zip.file('Metadata/slice_info.config');
   if (!sliceFile) return null; // file doesn't exist — caller will skip substitution
@@ -202,7 +202,7 @@ async function modifyModelSettings(zip, idMapping) {
  */
 function buildProjectSettings(outputSlots, hasSupport) {
   const { MIN_FILAMENTS, DEFAULT_FILAMENT_PROFILE, DUMMY_SLOT_COLOR, DUMMY_SLOT_TYPE,
-          BASE_TEMPLATE, SUPPORT_DELTA, FILAMENT_PROFILES, toRGBA } = self.MWU1;
+          BASE_TEMPLATE, SUPPORT_DELTA, FILAMENT_PROFILES, toRGBA } = self.C3MF;
 
   // Deep clone base template
   const combined = JSON.parse(JSON.stringify(BASE_TEMPLATE));

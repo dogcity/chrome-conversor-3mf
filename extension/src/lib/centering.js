@@ -1,4 +1,4 @@
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
 /**
  * Center the objects of a single-plate project on the target bed.
@@ -162,7 +162,7 @@ function shiftBuildItems(text, dx, dy) {
  * @param {string[]} printableArea - Target bed corners ("XxY")
  * @returns {Promise<Uint8Array>} The input bytes when nothing should change
  */
-self.MWU1.centerOnBed = async function(zip, modelBytes, printableArea) {
+self.C3MF.centerOnBed = async function(zip, modelBytes, printableArea) {
   const center = bedCenter(printableArea);
   if (!center || modelBytes.length > MAX_MODEL_BYTES) return modelBytes;
 

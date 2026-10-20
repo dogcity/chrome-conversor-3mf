@@ -15,7 +15,7 @@ function loadScripts(dir, files) {
 }
 
 const LIBS = ['constants.js', 'color-utils.js', 'filament-profiles.js', 'template-settings.js', 'converter.js'];
-const current = loadScripts('extension/src/lib', [...LIBS, 'targets/a1-profiles.js', 'targets.js']).MWU1;
+const current = loadScripts('extension/src/lib', [...LIBS, 'targets/a1-profiles.js', 'targets.js']).C3MF;
 const original = loadScripts('original/v1.1.5/src/lib', LIBS);
 const A1 = current.TARGETS.a1;
 

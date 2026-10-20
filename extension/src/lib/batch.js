@@ -1,11 +1,11 @@
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
 /**
  * Build a key identifying a file's filament configuration.
  * Order matters: the slot mapping is keyed by filament id, so two files can only
  * share one mapping when the same id carries the same type and color in both.
  */
-self.MWU1.filamentSignature = function(filaments) {
+self.C3MF.filamentSignature = function(filaments) {
   return filaments
     .map(f => `${f.id}|${(f.type || '').toUpperCase()}|${(f.color || '').toUpperCase()}`)
     .join(';');
@@ -18,10 +18,10 @@ self.MWU1.filamentSignature = function(filaments) {
  * @param {Array<{analysis: {filaments: Array}}>} items
  * @returns {Array<{filaments: Array, items: Array}>}
  */
-self.MWU1.groupBySignature = function(items) {
+self.C3MF.groupBySignature = function(items) {
   const groups = new Map();
   for (const item of items) {
-    const key = self.MWU1.filamentSignature(item.analysis.filaments);
+    const key = self.C3MF.filamentSignature(item.analysis.filaments);
     if (!groups.has(key)) groups.set(key, { filaments: item.analysis.filaments, items: [] });
     groups.get(key).items.push(item);
   }

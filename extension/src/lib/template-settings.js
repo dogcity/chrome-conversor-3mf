@@ -1,7 +1,7 @@
 // Auto-generated from u1_template.3mf — do not edit
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
-self.MWU1.BASE_TEMPLATE = {
+self.C3MF.BASE_TEMPLATE = {
   "accel_to_decel_enable": "1",
   "accel_to_decel_factor": "50%",
   "activate_air_filtration": [
@@ -1286,7 +1286,7 @@ self.MWU1.BASE_TEMPLATE = {
   "z_offset": "0"
 };
 
-self.MWU1.SUPPORT_DELTA = {
+self.C3MF.SUPPORT_DELTA = {
   "different_settings_to_system": [
     "enable_support",
     "",

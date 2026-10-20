@@ -71,7 +71,7 @@ async function fetchAndStore(url, fallbackName) {
   // for the browser to hold, fetch/arrayBuffer will reject and the caller shows an error.
   const arrayBuffer = await response.arrayBuffer();
 
-  await self.MWU1.storeFile(arrayBuffer, { url, originalName });
+  await self.C3MF.storeFile(arrayBuffer, { url, originalName });
   return originalName;
 }
 
@@ -162,7 +162,7 @@ function clearBadge() {
 chrome.downloads.onCreated.addListener(async (downloadItem) => {
   const url = downloadItem.url || '';
 
-  console.log('[MWU1] Download detected:', {
+  console.log('[C3MF] Download detected:', {
     url: url.slice(0, 120),
     filename: downloadItem.filename,
     referrer: downloadItem.referrer,
@@ -181,7 +181,7 @@ chrome.downloads.onCreated.addListener(async (downloadItem) => {
   if (!Number.isNaN(startedAt) && Date.now() - startedAt > 60000) return;
   if (!looks3mf(downloadItem)) return;
 
-  console.log('[MWU1] Intercepting .3mf download');
+  console.log('[C3MF] Intercepting .3mf download');
 
   try { await chrome.downloads.cancel(downloadItem.id); } catch {}
   try { await chrome.downloads.erase({ id: downloadItem.id }); } catch {}
@@ -192,10 +192,10 @@ chrome.downloads.onCreated.addListener(async (downloadItem) => {
   try {
     const name = await fetchAndStore(url, downloadItem.filename || url);
     clearBadge();
-    console.log('[MWU1] File fetched, opening popup. Name:', name);
+    console.log('[C3MF] File fetched, opening popup. Name:', name);
     openPopup();
   } catch (err) {
-    console.error('[MWU1] Fetch failed:', err);
+    console.error('[C3MF] Fetch failed:', err);
     showBadgeError();
   }
 });
@@ -216,7 +216,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         clearBadge();
         openPopup();
       } catch (err) {
-        console.error('[MWU1] Content script fetch failed:', err);
+        console.error('[C3MF] Content script fetch failed:', err);
         showBadgeError();
       }
     })();
@@ -230,7 +230,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // A toolbar click is a manual open, so drop any leftover pending download first;
 // otherwise the popup would re-process a stale file instead of showing the drop zone.
 chrome.action.onClicked.addListener(async () => {
-  try { await self.MWU1.clearFile(); } catch {}
+  try { await self.C3MF.clearFile(); } catch {}
   openPopup();
 });
 
@@ -239,6 +239,6 @@ chrome.action.onClicked.addListener(async () => {
 // windows the browser restored via session restore. The popup also self-closes when
 // it sees no swSessionActive marker; this is a best-effort backstop.
 chrome.runtime.onStartup.addListener(async () => {
-  try { await self.MWU1.clearFile(); } catch {}
+  try { await self.C3MF.clearFile(); } catch {}
   await closeExistingPopups();
 });

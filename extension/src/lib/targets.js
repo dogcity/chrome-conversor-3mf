@@ -1,4 +1,4 @@
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
 /**
  * Conversion targets. Each slot holds { color, type }, where `type` is one of the
@@ -7,7 +7,7 @@ self.MWU1 = self.MWU1 || {};
 
 /** Pick the U1 filament type closest to the source file's type string. */
 function defaultU1Type(original) {
-  const types = self.MWU1.FILAMENT_PROFILES || [];
+  const types = self.C3MF.FILAMENT_PROFILES || [];
   if (!original || types.length === 0) return types[0]?.type || 'PLA';
   const up = original.toUpperCase();
   for (const ft of types) {
@@ -33,7 +33,7 @@ const A1_DEFAULT_FLUSH = '400';
  * Every slot takes the values of its own filament preset.
  */
 function buildA1ProjectSettings(outputSlots, hasSupport, { printProfile } = {}) {
-  const data = self.MWU1.A1_DATA;
+  const data = self.C3MF.A1_DATA;
   const print = data.print_profiles[printProfile] || data.print_profiles[A1_DEFAULT_PRINT_PROFILE];
   const presets = outputSlots.map(s => data.filament_profiles[s.type] || data.filament_profiles[A1_DEFAULT_FILAMENT]);
 
@@ -58,16 +58,16 @@ function buildA1ProjectSettings(outputSlots, hasSupport, { printProfile } = {}) 
   return JSON.stringify(cfg, null, 4);
 }
 
-self.MWU1.TARGETS = {
+self.C3MF.TARGETS = {
   u1: {
     id: 'u1',
     label: 'Snapmaker U1',
     suffix: '-U1',
     printerModelId: 'Snapmaker U1',
     application: null,
-    minFilaments: self.MWU1.MIN_FILAMENTS,
+    minFilaments: self.C3MF.MIN_FILAMENTS,
     slotsLabel: 'Slots de la U1',
-    choices: (self.MWU1.FILAMENT_PROFILES || []).map(p => ({ value: p.type, label: p.type })),
+    choices: (self.C3MF.FILAMENT_PROFILES || []).map(p => ({ value: p.type, label: p.type })),
     printProfiles: [],
     defaultChoice: defaultU1Type,
     filamentType: slot => slot.type,
@@ -78,13 +78,13 @@ self.MWU1.TARGETS = {
     label: 'Bambu A1',
     suffix: '-A1',
     printerModelId: null,
-    application: `BambuStudio-${self.MWU1.A1_DATA.source.application}`,
+    application: `BambuStudio-${self.C3MF.A1_DATA.source.application}`,
     minFilaments: 0,
     slotsLabel: 'Slots AMS Lite de la A1',
-    choices: Object.keys(self.MWU1.A1_DATA.filament_profiles).map(name => ({ value: name, label: name })),
-    printProfiles: Object.keys(self.MWU1.A1_DATA.print_profiles),
+    choices: Object.keys(self.C3MF.A1_DATA.filament_profiles).map(name => ({ value: name, label: name })),
+    printProfiles: Object.keys(self.C3MF.A1_DATA.print_profiles),
     defaultChoice: defaultA1Filament,
-    filamentType: slot => (self.MWU1.A1_DATA.filament_profiles[slot.type] || {}).type || 'PLA',
+    filamentType: slot => (self.C3MF.A1_DATA.filament_profiles[slot.type] || {}).type || 'PLA',
     buildProjectSettings: buildA1ProjectSettings,
   },
 };

@@ -1,11 +1,11 @@
-self.MWU1 = self.MWU1 || {};
+self.C3MF = self.C3MF || {};
 
 /**
  * Return `desired`, or `name-2.ext`, `name-3.ext`... when that name is already taken.
  * @param {string} desired - e.g. "model-A1.3mf"
  * @param {Set<string>} taken - existing file names (any case)
  */
-self.MWU1.uniqueFilename = function(desired, taken) {
+self.C3MF.uniqueFilename = function(desired, taken) {
   const lower = new Set([...taken].map(n => n.toLowerCase()));
   if (!lower.has(desired.toLowerCase())) return desired;
   const dot = desired.lastIndexOf('.');
