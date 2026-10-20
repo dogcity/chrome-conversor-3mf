@@ -9,3 +9,6 @@ odd/
 .atl/
 .claude/
 .mcp.json
+
+# Store packages
+dist/
