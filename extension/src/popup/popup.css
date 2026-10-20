@@ -255,6 +255,17 @@ body {
 .btn-new:disabled { opacity: 0.35; cursor: not-allowed; }
 .btn-new:disabled:hover { border-color: var(--border); color: var(--text-secondary); }
 
+/* ---- Footer ---- */
+.footer {
+    text-align: center; padding: 0.75rem 0 0;
+    font-size: 0.78rem; font-family: 'Source Code Pro', monospace;
+    color: var(--text-dim);
+}
+.footer a {
+    color: var(--text-dim); text-decoration: none; transition: color 0.15s;
+}
+.footer a:hover { color: var(--accent); }
+
 .hidden { display: none !important; }
 
 @keyframes fadeSlideIn {

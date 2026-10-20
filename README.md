@@ -1,5 +1,7 @@
 # Conversor 3MF a Snapmaker U1 y Bambu A1
 
+Creado por [jortega.cl](https://jortega.cl).
+
 Extensión de Chrome que convierte archivos `.3mf` al formato de la **Snapmaker U1** o de la **Bambu Lab A1**. Toda la conversión ocurre en el navegador: los archivos no se envían a ningún servidor.
 
 ## Funciones
