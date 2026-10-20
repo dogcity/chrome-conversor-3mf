@@ -58,8 +58,9 @@ self.MWU1.convert = async function({ zip, outputSlots, mapping, hasSupport, targ
       output.file(path, substitutions[path]);
     } else {
       let bytes = await file.async('uint8array');
-      if (target.application && path === '3D/3dmodel.model') {
-        bytes = self.MWU1.setApplicationMetadata(bytes, target.application);
+      if (path === '3D/3dmodel.model') {
+        bytes = await self.MWU1.centerOnBed(zip, bytes, JSON.parse(newProjectSettings).printable_area);
+        if (target.application) bytes = self.MWU1.setApplicationMetadata(bytes, target.application);
       }
       output.file(path, bytes);
     }
