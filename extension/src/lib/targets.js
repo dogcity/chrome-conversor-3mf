@@ -17,6 +17,12 @@ function defaultU1Type(original) {
 }
 
 const A1_DEFAULT_FILAMENT = 'eSUN - PLA+ 2025';
+const A1_PETG_FILAMENT = 'Elegoo Rapid PETG A1';
+
+/** Pick the A1 filament preset for the source file's type string: PETG or the default PLA+. */
+function defaultA1Filament(original) {
+  return original && original.toUpperCase().includes('PETG') ? A1_PETG_FILAMENT : A1_DEFAULT_FILAMENT;
+}
 const A1_DEFAULT_PRINT_PROFILE = '0.20mm A1 - principal';
 // Purge volume between two different filaments. Bambu Studio derives it from the color
 // pair; this fixed value errs on the safe side and can be recalculated in the slicer.
@@ -77,7 +83,7 @@ self.MWU1.TARGETS = {
     slotsLabel: 'Slots AMS Lite de la A1',
     choices: Object.keys(self.MWU1.A1_DATA.filament_profiles).map(name => ({ value: name, label: name })),
     printProfiles: Object.keys(self.MWU1.A1_DATA.print_profiles),
-    defaultChoice: () => A1_DEFAULT_FILAMENT,
+    defaultChoice: defaultA1Filament,
     filamentType: slot => (self.MWU1.A1_DATA.filament_profiles[slot.type] || {}).type || 'PLA',
     buildProjectSettings: buildA1ProjectSettings,
   },

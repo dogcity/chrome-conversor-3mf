@@ -33,7 +33,10 @@ self.MWU1.convert = async function({ zip, outputSlots, mapping, hasSupport, targ
     modifySliceInfo(zip, outputSlots, mapping, target),
     modifyModelSettings(zip, idMapping),
   ]);
-  const newProjectSettings = target.buildProjectSettings(outputSlots, hasSupport, { printProfile });
+  const newProjectSettings = self.MWU1.applyModelSettings(
+    target.buildProjectSettings(outputSlots, hasSupport, { printProfile }),
+    await self.MWU1.readModelSettings(zip),
+  );
 
   // Build output ZIP — copy entries in parallel, substitute modified files
   // Only include substitutions for files that existed and were successfully modified

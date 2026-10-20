@@ -28,8 +28,8 @@ test('A1 targets the Bambu Lab A1 printer with the user print profile', () => {
   assert.strictEqual(cfg.print_settings_id, '0.20mm A1 - principal');
 });
 
-test('every A1 slot defaults to eSUN - PLA+ 2025', () => {
-  assert.strictEqual(A1.defaultChoice('PETG'), 'eSUN - PLA+ 2025');
+test('non-PETG A1 slots default to eSUN - PLA+ 2025', () => {
+  assert.strictEqual(A1.defaultChoice('PLA'), 'eSUN - PLA+ 2025');
   assert.ok(A1.choices.some(c => c.value === 'eSUN - PLA+ 2025'));
 });
 
